@@ -1,40 +1,28 @@
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    maven 'maven-3.9.12'
-  }
-
-  stages {
-
-    stage('Hello') {
-      steps {
-        echo 'HELLO FROM JENKINS'
-      }
+    tools {
+        maven 'maven-3.9.12'
     }
 
-    stage('Maven Version') {
-      steps {
-        sh 'mvn -version'
-      }
-    }
+    stages {
 
-    stage('Test') {
-      steps {
-        sh 'mvn -B test'
-      }
-      post {
-        always {
-          junit testResults: '**/target/surefire-reports/TEST-*.xml',
-                allowEmptyResults: false
+        stage('Build') {
+            steps {
+                sh 'mvn -version'
+                sh 'mvn -B -DskipTests package'
+            }
         }
-      }
-    }
 
-    stage('Package') {
-      steps {
-        sh 'mvn -B package'
-      }
+        stage('Test') {
+            steps {
+                sh 'mvn -B test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
     }
-  }
 }
