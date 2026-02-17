@@ -1,10 +1,29 @@
 pipeline {
-  agent { label 'container-linux' }
+  agent any
 
   stages {
-    stage('Hello') {
+    stage('Checkout') {
       steps {
-        echo "Hello from Bello ${env.NODE_NAME}"
+        checkout scm
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'mvn -B -DskipTests package'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'mvn -B test'
+      }
+      post {
+        always {
+          // Maven Surefire / Failsafe default XML locations:
+          junit testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml',
+                allowEmptyResults: true
+        }
       }
     }
   }
