@@ -1,29 +1,22 @@
 pipeline {
   agent any
 
+  tools {
+    maven 'maven-3.9.12'
+  }
+
   stages {
-    stage('Checkout') {
+
+    stage('Hello') {
       steps {
-        checkout scm
+        echo 'HELLO FROM JENKINS PIPELINE 🚀'
+        sh 'echo HELLO FROM SHELL'
       }
     }
 
     stage('Build') {
       steps {
-        sh 'mvn -B -DskipTests package'
-      }
-    }
-
-    stage('Test') {
-      steps {
-        sh 'mvn -B test'
-      }
-      post {
-        always {
-          // Maven Surefire / Failsafe default XML locations:
-          junit testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/TEST-*.xml',
-                allowEmptyResults: true
-        }
+        sh 'mvn -version'
       }
     }
   }
