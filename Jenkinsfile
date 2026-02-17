@@ -1,9 +1,10 @@
 pipeline {
-  agent any
+  agent { label 'container-linux' }
+
   stages {
     stage('Hello') {
       steps {
-        echo 'Hello from Jenkins Pipeline'
+        echo "Hello from ${env.NODE_NAME}"
       }
     }
   }
