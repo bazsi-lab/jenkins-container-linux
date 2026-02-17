@@ -9,14 +9,31 @@ pipeline {
 
     stage('Hello') {
       steps {
-        echo 'HELLO FROM JENKINS PIPELINE 🚀'
-        sh 'echo HELLO FROM SHELL'
+        echo 'HELLO FROM JENKINS'
       }
     }
 
-    stage('Build') {
+    stage('Maven Version') {
       steps {
         sh 'mvn -version'
+      }
+    }
+
+    stage('Test') {
+      steps {
+        sh 'mvn -B test'
+      }
+      post {
+        always {
+          junit testResults: '**/target/surefire-reports/TEST-*.xml',
+                allowEmptyResults: false
+        }
+      }
+    }
+
+    stage('Package') {
+      steps {
+        sh 'mvn -B package'
       }
     }
   }
