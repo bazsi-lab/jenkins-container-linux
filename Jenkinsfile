@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('Hello') {
       steps {
-        echo "Hello from ${env.NODE_NAME}"
+        echo "Hello from Bello ${env.NODE_NAME}"
       }
     }
   }
